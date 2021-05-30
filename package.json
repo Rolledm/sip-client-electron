@@ -1,0 +1,19 @@
+{
+  "name": "sip-client-electron",
+  "version": "1.0.0",
+  "description": "Simple desktop SIP client.",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Vladislav Migachev",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^13.0.1"
+  },
+  "dependencies": {
+    "jssip": "^3.7.5",
+    "jssip-node-websocket": "^3.0.0"
+  }
+}
