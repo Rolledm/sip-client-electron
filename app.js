@@ -32,6 +32,11 @@ ua.on("registrationFailed", (data) => {
   document.getElementById("status").textContent = "Registration failed.";
 });
 
+ua.on("newMessage", (data) => {
+  document.getElementById("messages").textContent = "You have new message";
+  console.log(data)
+});
+
 
 JsSIP.debug.enable("*")
 
@@ -44,4 +49,20 @@ document.getElementById("register").addEventListener("click", () => {
 
 document.getElementById("unregister").addEventListener("click", () => {
   ua.unregister();
+});
+
+document.getElementById("sendMessage").addEventListener("click", () => {
+  var text = 'Hello Bob!';
+
+  // Register callbacks to desired message events
+  var eventHandlers = {
+    'succeeded': function(e){ console.log("Sent!") },
+    'failed':    function(e){ console.log("Ne sent...") }
+  };
+
+  var options = {
+    'eventHandlers': eventHandlers
+  };
+
+  ua.sendMessage('sip:017@192.168.100.7', text, options);
 });
