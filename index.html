@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <link rel="stylesheet" href="css/skeleton.css">
     <meta charset="UTF-8">
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
@@ -8,16 +9,31 @@
     <title>Simple SIP Client</title>
   </head>
   <body>
-    <p id="status">You are not registered.</h1>
-    <p id="messages"></p>
+    <div id="regparams">
+      <p>Login parameters</p>
+      <input type="text" id="server" placeholder="server"><br>
+      <input type="text" id="user" placeholder="user"><br>
+      <input type="text" id="domain" placeholder="domain"><br>
+      <input type="text" id="password" placeholder="password"><br>
+      <input type="text" id="display_name" placeholder="display_name">
+    </div>
+
+    <p id="status">You are not registered.</p>
     <button id="register">Register</button>
     <button id="unregister">Unregister</button>
 
-    <p>Chat</p>
-    <input type="text" id="chatUA" placeholder="Receiver">
-    <input type="text" id="chatText" placeholder="Text">
-    <button id="sendMessage">Send Message</button>
-
+    <div id="client">
+      <p>Call</p>
+      <input type="text" id="callee" placeholder="Callee">
+      <button id="call">Call</button>
+      <button id="terminate">Terminate</button>
+      
+      <p>Chat</p>
+      <input type="text" id="chatUA" placeholder="Receiver">
+      <input type="text" id="chatText" placeholder="Text">
+      <button id="sendMessage">Send Message</button>
+      <p id="messages"></p>
+    </div>
 
     <script src="./app.js"></script>
   </body>
