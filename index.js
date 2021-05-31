@@ -10,7 +10,7 @@ function createWindow() {
             contextIsolation: false
         }
     });
-
+    //window.webContents.openDevTools()
     window.loadFile("./index.html");
 }
 

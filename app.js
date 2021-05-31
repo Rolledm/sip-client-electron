@@ -33,8 +33,11 @@ ua.on("registrationFailed", (data) => {
 });
 
 ua.on("newMessage", (data) => {
-  document.getElementById("messages").textContent = "You have new message";
-  console.log(data)
+  if (data.originator === "local") {
+    document.getElementById("messages").textContent = "Message sent";
+  } else {
+    document.getElementById("messages").textContent = data.request.body;
+  }
 });
 
 
