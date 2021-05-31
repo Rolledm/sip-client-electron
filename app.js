@@ -55,8 +55,9 @@ document.getElementById("unregister").addEventListener("click", () => {
 });
 
 document.getElementById("sendMessage").addEventListener("click", () => {
-  var text = 'Hello Bob!';
-
+  let receiver = document.getElementById("chatUA").value;
+  let text = document.getElementById("chatText").value;
+  
   // Register callbacks to desired message events
   var eventHandlers = {
     'succeeded': function(e){ console.log("Sent!") },
@@ -67,5 +68,5 @@ document.getElementById("sendMessage").addEventListener("click", () => {
     'eventHandlers': eventHandlers
   };
 
-  ua.sendMessage('sip:017@192.168.100.7', text, options);
+  ua.sendMessage(`sip:${receiver}@${domain}`, text, options);
 });
