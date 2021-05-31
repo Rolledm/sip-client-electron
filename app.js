@@ -1,12 +1,15 @@
 const JsSIP = require('jssip');
 const NodeWebSocket = require('jssip-node-websocket');
 
-let socket = new NodeWebSocket('ws://192.168.100.7:80');
+let config = require('./config/example.json')
 
-let user = '016';
-let domain = '192.168.100.7';
-let password = '123456';
-let display_name = 'Alice';
+let server = config.server;
+let user = config.user;
+let domain = config.domain;
+let password = config.password;
+let display_name = config.display_name;
+
+let socket = new NodeWebSocket(`ws://${server}`);
 
 let ua = new JsSIP.UA(
   {
