@@ -2,71 +2,33 @@ const { session } = require('electron');
 const JsSIP = require('jssip');
 const NodeWebSocket = require('jssip-node-websocket');
 
-const etState = {
-  LOGIN: 0,
-  MAIN: 1,
-  CALL: 2
-};
+const state = require('./state');
+const config = require('./config')
 
-let applyStateChange = (state) => {
-  switch (state) {
-    case etState.LOGIN:
-      document.getElementById("regparams").style.display = 'block';
-      document.getElementById("register").style.display = 'inline';
-      document.getElementById("unregister").style.display = 'none';
-      document.getElementById("client").style.display = 'none';
-      break;
-    
-    case etState.MAIN:
-      document.getElementById("regparams").style.display = 'none';
-      document.getElementById("register").style.display = 'none';
-      document.getElementById("unregister").style.display = 'inline';
-      document.getElementById("client").style.display = 'block';
-      break;
-  
-    default:
-      break;
-  }
-}
+state.applyStateChange(state.etState.LOGIN);
+config.loadFromConfigFile();
 
-applyStateChange(etState.LOGIN);
-
-let config = require('./config/example.json')
-
-document.getElementById("server").value = config.server;
-document.getElementById("user").value = config.user;
-document.getElementById("domain").value = config.domain;
-document.getElementById("password").value = config.password;
-document.getElementById("display_name").value = config.display_name;
-
-let server = document.getElementById("server").value;
-let user = document.getElementById("user").value;
-let domain = document.getElementById("domain").value;
-let password = document.getElementById("password").value;
-let display_name = document.getElementById("display_name").value;
-
-let socket = new NodeWebSocket(`ws://${server}`);
+const registerData = config.collectRegisterDataFromDocument();
+let socket = new NodeWebSocket(`ws://${registerData.server}`);
+let ua = new JsSIP.UA(
+{
+  uri          : `sip:${registerData.user}@${registerData.domain}`,
+  password     : registerData.password,
+  display_name : registerData.display_name,
+  sockets      : [ socket ]
+});
 
 let audio = new window.Audio();
 audio.autoplay = true;
 
-let ua = new JsSIP.UA(
-  {
-    uri          : `sip:${user}@${domain}`,
-    password     : password,
-    display_name : display_name,
-    sockets      : [ socket ]
-  });
-
-
 ua.on("registered", (data) => {
-  document.getElementById("status").textContent = `${display_name} ${user}`;
-  applyStateChange(etState.MAIN);
+  document.getElementById("status").textContent = `${registerData.display_name} ${registerData.user}`;
+  state.applyStateChange(state.etState.MAIN);
 });
 
 ua.on("unregistered", (data) => {
   document.getElementById("status").textContent = "You are not registered.";
-  applyStateChange(etState.LOGIN);
+  state.applyStateChange(state.etState.LOGIN);
 });
 
 ua.on("registrationFailed", (data) => {
@@ -137,12 +99,12 @@ document.getElementById("sendMessage").addEventListener("click", () => {
     'eventHandlers': eventHandlers
   };
 
-  ua.sendMessage(`sip:${receiver}@${domain}`, text, options);
+  ua.sendMessage(`sip:${receiver}@${registerData.domain}`, text, options);
 });
 
 document.getElementById("call").addEventListener("click", () => {
   let callee = document.getElementById("callee").value;
-  session = ua.call(`sip:${callee}@${domain}`, options);
+  session = ua.call(`sip:${callee}@${registerData.domain}`, options);
 });
 
 document.getElementById("terminate").addEventListener("click", () => {
