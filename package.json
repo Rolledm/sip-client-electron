@@ -1,16 +1,20 @@
 {
   "name": "sip-client-electron",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simple desktop SIP client.",
   "main": "index.js",
   "scripts": {
     "start": "electron .",
+    "postinstall": "electron-builder install-app-devs",
+    "build": "electron-builder --mac --windows --linux",
+    "release": "electron-builder --mac --windows --linux",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Vladislav Migachev",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^13.0.1"
+    "electron": "^13.0.1",
+    "electron-builder": "^23.0.3"
   },
   "dependencies": {
     "jssip": "^3.7.5",
